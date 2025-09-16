@@ -6,6 +6,10 @@ export class KimaiService {
   async pushKimaiEntries(args: { entries: KimaiEntry[] }) {
     const kimaiApiUrl = `${process.env.KIMAI_API_URL}/timesheets`;
 
+    if (!kimaiApiUrl) {
+      throw new Error(`Kimai Endpoint not set`);
+    }
+
     const results: string[] = [];
 
     const headers = this.getHeaders();
@@ -47,6 +51,9 @@ export class KimaiService {
 
   private getHeaders() {
     const kimaiToken = process.env.KIMAI_API_TOKEN;
+    if (!kimaiToken) {
+      throw new Error(`Kimai Endpoint not set`);
+    }
     const headers = new Headers();
     headers.append("accept", "application/json");
     headers.append("Content-Type", "application/json");
