@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { constructLogsStatement } from "../src/utils/git_utils.js";
+import { constructLogsStatement } from "../src/service/git.js";
 
 describe("constructLogsStatement", () => {
   it("builds default command with limit 25 when no args", () => {

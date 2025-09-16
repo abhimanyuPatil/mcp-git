@@ -6,7 +6,7 @@ import {
   ListToolsRequestSchema,
   McpError,
 } from "@modelcontextprotocol/sdk/types.js";
-import { GitUtils } from "./utils/git_utils.js";
+import { GitUtils } from "./service/git.js";
 import { KimaiService } from "./service/kimai.js";
 import { KimaiEntry } from "./types/index.js";
 class GitMcpServer {
