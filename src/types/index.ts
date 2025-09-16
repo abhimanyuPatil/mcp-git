@@ -17,3 +17,11 @@ export interface GitCommit {
   authorDateRel: string;
   body: string;
 }
+
+export interface KimaiEntry {
+  begin: string;
+  end: string;
+  project: number;
+  activity: number;
+  description: string;
+}

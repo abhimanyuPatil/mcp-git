@@ -7,6 +7,8 @@ import {
   McpError,
 } from "@modelcontextprotocol/sdk/types.js";
 import { GitUtils } from "./utils/git_utils.js";
+import { KimaiService } from "./service/kimai.js";
+import { KimaiEntry } from "./types/index.js";
 class GitMcpServer {
   private server: Server;
 
@@ -21,6 +23,7 @@ class GitMcpServer {
         capabilities: {
           tools: {
             get_git_log: {},
+            push_kimai_entries: {},
           },
         },
       }
@@ -78,6 +81,37 @@ class GitMcpServer {
               required: [],
             },
           },
+          {
+            name: "push_kimai_entries",
+            description: "Push multiple time entries to Kimai",
+            inputSchema: {
+              type: "object",
+              properties: {
+                entries: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      begin: { type: "string", format: "date-time" },
+                      end: { type: "string", format: "date-time" },
+                      project: { type: "number" },
+                      activity: { type: "number" },
+                      description: { type: "string" },
+                    },
+                    required: [
+                      "begin",
+                      "end",
+                      "project",
+                      "activity",
+                      "description",
+                    ],
+                  },
+                  minItems: 1,
+                },
+              },
+              required: ["entries"],
+            },
+          },
         ],
       };
     });
@@ -89,6 +123,10 @@ class GitMcpServer {
         switch (name) {
           case "get_git_log":
             return await new GitUtils().handleGetGitLogTerminal(args);
+          case "push_kimai_entries":
+            return await new KimaiService().pushKimaiEntries(
+              args as { entries: KimaiEntry[] }
+            );
           default:
             throw new McpError(
               ErrorCode.MethodNotFound,
