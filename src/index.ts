@@ -15,7 +15,7 @@ class GitMcpServer {
   private server: Server;
 
   constructor() {
-    dotenv.config({quiet: true});
+    dotenv.config({ quiet: true });
     this.server = new Server(
       {
         name: "mcp-git",
@@ -137,7 +137,7 @@ class GitMcpServer {
             );
         }
       } catch (error) {
-        console.error("Error setting request handler", error)
+        console.error("Error setting request handler", error);
         const errorMessage =
           error instanceof Error ? error.message : String(error);
 
