@@ -25,3 +25,25 @@ export interface KimaiEntry {
   activity: number;
   description: string;
 }
+
+export interface TimeSheetEntry {
+  activity: number;
+  project: number;
+  user: number;
+  tags: string[];
+  id: number;
+  begin: string;
+  end: string;
+  duration: number;
+  description: string;
+  rate: number;
+  internalRate: number;
+  fixedRate: number;
+  hourlyRate: number;
+  exported: boolean;
+  billable: boolean;
+  metaFields: {
+    name: string;
+    value: string;
+  }[];
+}

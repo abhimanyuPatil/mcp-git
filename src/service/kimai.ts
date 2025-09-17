@@ -1,4 +1,5 @@
-import { KimaiEntry } from "../types/index.js";
+import { KimaiEntry, TimeSheetEntry } from "../types/index.js";
+import fetch, { Headers } from "node-fetch";
 
 export class KimaiService {
   constructor() {}
@@ -22,7 +23,7 @@ export class KimaiService {
           body: JSON.stringify(entry),
         });
 
-        const data = await response.json();
+        const data = (await response.json()) as TimeSheetEntry;
         if (!response.ok) {
           results.push(
             `Entry ${index + 1}: ❌ Failed - ${JSON.stringify(data)}`
