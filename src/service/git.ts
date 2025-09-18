@@ -20,7 +20,7 @@ export function constructLogsStatement(args: any, branch?: string) {
   return gitCommand;
 }
 
-export class GitUtils {
+export class GitService {
   constructor() {}
 
   async handleGetGitLogTerminal(args: any) {

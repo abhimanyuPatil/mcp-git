@@ -6,16 +6,14 @@ import {
   ListToolsRequestSchema,
   McpError,
 } from "@modelcontextprotocol/sdk/types.js";
-import { GitUtils } from "./service/git.js";
+import { GitService } from "./service/git.js";
 import { KimaiService } from "./service/kimai.js";
 import { KimaiEntry } from "./types/index.js";
-import dotenv from "dotenv";
-
+ 
 class GitMcpServer {
   private server: Server;
 
   constructor() {
-    dotenv.config({ quiet: true });
     this.server = new Server(
       {
         name: "mcp-git",
@@ -31,7 +29,6 @@ class GitMcpServer {
         },
       }
     );
-
     this.setupTools();
   }
 
@@ -119,15 +116,17 @@ class GitMcpServer {
       };
     });
 
+    const kimaiService = new KimaiService();
+    const gitService = new GitService();
     this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
       const { name, arguments: args } = request.params;
 
       try {
         switch (name) {
           case "get_git_log":
-            return await new GitUtils().handleGetGitLogTerminal(args);
+            return await gitService.handleGetGitLogTerminal(args);
           case "push_kimai_entries":
-            return await new KimaiService().pushKimaiEntries(
+            return await kimaiService.pushKimaiEntries(
               args as { entries: KimaiEntry[] }
             );
           default:

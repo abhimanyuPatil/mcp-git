@@ -1,14 +1,19 @@
-import { KimaiEntry, TimeSheetEntry } from "../types/index.js";
 import fetch, { Headers } from "node-fetch";
+import { KimaiEntry, TimeSheetEntry } from "../types/index.js";
 
 export class KimaiService {
   constructor() {}
 
   async pushKimaiEntries(args: { entries: KimaiEntry[] }) {
-    const kimaiApiUrl = `${process.env.KIMAI_API_URL}/timesheets`;
-
-    if (!kimaiApiUrl) {
-      throw new Error(`Kimai Endpoint not set`);
+    if (!process.env.KIMAI_API_URL || !process.env.KIMAI_API_TOKEN) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "⚠️ Kimai API URL and/or API Token are not set in the environment variables. Please set `KIMAI_API_URL` and `KIMAI_API_TOKEN` in your `.env` file and restart the server and client.",
+          },
+        ],
+      };
     }
 
     const results: string[] = [];
@@ -17,13 +22,15 @@ export class KimaiService {
 
     for (const [index, entry] of args.entries.entries()) {
       try {
-        const response = await fetch(kimaiApiUrl, {
+
+        const response = await fetch(`${process.env.KIMAI_API_URL}/timesheets`, {
           method: "POST",
           headers,
           body: JSON.stringify(entry),
         });
 
         const data = (await response.json()) as TimeSheetEntry;
+
         if (!response.ok) {
           results.push(
             `Entry ${index + 1}: ❌ Failed - ${JSON.stringify(data)}`
@@ -51,14 +58,10 @@ export class KimaiService {
   }
 
   private getHeaders() {
-    const kimaiToken = process.env.KIMAI_API_TOKEN;
-    if (!kimaiToken) {
-      throw new Error(`Kimai Endpoint not set`);
-    }
     const headers = new Headers();
     headers.append("accept", "application/json");
     headers.append("Content-Type", "application/json");
-    headers.append("Authorization", `Bearer ${kimaiToken}`);
+    headers.append("Authorization", `Bearer ${process.env.KIMAI_API_TOKEN}`);
     return headers;
   }
 }
