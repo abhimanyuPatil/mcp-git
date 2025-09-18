@@ -8,6 +8,7 @@ A Model Context Protocol (MCP) server that lets your favorite desktop AI applica
 - Push timesheet entries to Kimai using information from your Git activity.
 - Integrates with LLMs: Ask your AI to fetch logs, summarize, and log time effortlessly.
 - Secure API token usage for Kimai.
+
 ## 📥 Installation
 
 #### Clone the repository
@@ -17,12 +18,23 @@ git clone https://github.com/your-org/git-kimai-mcp.git
 cd git-kimai-mcp
 ```
 
-#### Environmental Setup
-Create a `.env` file and add:
+#### 🤖 AI Application Integration / Environmental Setup
+Navigate to `/Users/abhimanyupatil/Library/Application Support/Claude` or
+Open Claude Desktop -> Open Settings -> Developer -> Edit Config
 
-```text
-KIMAI_API_URL=https://your.kimai.instance/api/timesheets
-KIMAI_API_TOKEN=your_kimai_api_token
+```json
+{
+    "mcpServers": {
+      "mcp-git": {
+        "command": "node",
+        "args": ["/path/to/build/index.js"],
+        "env": {
+          "KIMAI_API_URL": "https://timesheet.technogise.com/api",
+          "KIMAI_API_TOKEN": "your_kimai_api_token"
+        }
+      }
+    }
+  }
 ```
 
 #### Install dependencies
@@ -34,25 +46,6 @@ Build and start the server
 
 ```bash
 npm run build-start
-```
-
-## 🤖 AI Application Integration
-
-Edit your config:
-
-Path: `~/.config/claude-desktop/mcp_servers.json` (Linux/macOS)
-
-Path: `%APPDATA%/Claude/mcp_servers.json` (Windows)
-
-```json
-{
-  "mcpServers": {
-    "git-kimai": {
-      "command": "node",
-      "args": ["/path/to/build/index.js"]
-    }
-  }
-}
 ```
 
 ## 💡 Example Workflow
@@ -68,6 +61,7 @@ Call MCP server to get git logs
 Summarize activity
 
 Push timesheet(s) to Kimai via API
+
 ## 🛠️ Usage Notes
 Make sure your repo path is a valid git repository.
 
